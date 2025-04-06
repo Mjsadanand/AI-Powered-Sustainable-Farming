@@ -46,14 +46,18 @@ def main():
         submitted = st.form_submit_button("🚀 Predict Best Crop")
 
         if submitted:
-            feature_list = [N, P, K, temp, humidity, ph, rainfall]
-            single_pred = np.array(feature_list).reshape(1, -1)
-            loaded_model = load_model('model.pkl')
-            prediction = loaded_model.predict(single_pred)
-            
-            st.markdown("---")
-            st.success(f"✅ Based on the inputs, the recommended crop is: **{prediction.item().title()}** 🌾")
-            st.markdown("---")
+            # Input validation check
+            if N == 0 or P == 0 or K == 0 or temp == 0.0 or humidity == 0.0 or ph == 0.0 or rainfall == 0.0:
+                st.error("❌ Please enter all values for an accurate prediction.")
+            else:
+                feature_list = [N, P, K, temp, humidity, ph, rainfall]
+                single_pred = np.array(feature_list).reshape(1, -1)
+                loaded_model = load_model('model.pkl')
+                prediction = loaded_model.predict(single_pred)
+                
+                st.markdown("---")
+                st.success(f"✅ Based on the inputs, the recommended crop is: **{prediction.item().title()}** 🌾")
+                st.markdown("---")
 
     st.markdown(
         """
@@ -66,6 +70,7 @@ def main():
         unsafe_allow_html=True
     )
 
+    # Hide menu and footer
     hide_menu_style = """
     <style>
     #MainMenu {visibility: hidden;}
